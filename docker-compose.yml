@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+    - .env
+
+  web:
+    build:
+      context: .
+    container_name: web
+    entrypoint: sh -c "sh /scripts/run.sh"
+    volumes:
+      - .:/usr/src/app
+      - ./scripts/run.sh:/scripts/run.sh
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+volumes:
+  postgres_data: { }
