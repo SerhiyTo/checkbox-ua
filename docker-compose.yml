@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:latest
-    container_name: db
+    container_name: checkbox-db
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -16,7 +16,7 @@ services:
   web:
     build:
       context: .
-    container_name: web
+    container_name: checkbox-api
     entrypoint: sh -c "sh /scripts/run.sh"
     volumes:
       - .:/usr/src/app

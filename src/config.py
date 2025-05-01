@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ENV_FILE = os.path.join(BASE_DIR, ".env")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 class Settings(BaseSettings):
@@ -26,12 +26,18 @@ class Settings(BaseSettings):
         "postgresql://postgres:postgres@localhost:5432/postgres"
     )
 
+    ACCESS_TOKEN_TYPE: str = Field("access")
+    REFRESH_TOKEN_TYPE: str = Field("refresh")
     SECRET_KEY: str = Field("secret")
     ALGORITHM: str = Field("HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(3600)
+    REFRESH_TOKEN_EXPIRE_DAYS: int = Field(15)
 
     model_config = SettingsConfigDict(
         env_file=ENV_FILE,
         env_file_encoding="utf-8",
         extra="ignore",
     )
+
+
+settings = Settings()

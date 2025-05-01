@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Check</title>
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<body style="height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center">
+<div style="border: dotted black 1px; width: 260px; display: flex; flex-direction: column; gap: 12px; padding: 12px">
+    <p style="text-align: center">IE Test Check</p>
+    <hr style="border: dashed 2px black; border-left: none; border-right: none; width: 100%; height: 2px">
+
+    {% for product in check.products %}
+        <p>{{ product.quantity }} x {{ product.price }}</p>
+        <p style="display: flex; align-items: center; justify-content: space-between">
+            {{ product.name }}<span>{{ product.total }}</span>
+        </p>
+        {% if not loop.last %}
+            <hr style="border-top: dashed 2px black; width: 100%;">
+        {% endif %}
+    {% endfor %}
+
+    <hr style="border: dashed 2px black; border-left: none; border-right: none; width: 100%; height: 2px">
+    <p style="display: flex; align-items: center; justify-content: space-between">TOTAL<span>{{ check.total }}</span></p>
+    <p style="display: flex; align-items: center; justify-content: space-between">{{ payment_type }}<span>{{ check.total }}</span></p>
+    <p style="display: flex; align-items: center; justify-content: space-between">Rest<span>{{ check.rest }}</span></p>
+    <hr style="border: dashed 2px black; border-left: none; border-right: none; width: 100%; height: 2px">
+    <p style="text-align: center">{{ created_at }}</p>
+    <p style="text-align: center">Thank you for your purchase!</p>
+</div>
+</body>
+</html>
