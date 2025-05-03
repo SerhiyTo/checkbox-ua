@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import Optional
 
 from pydantic import Field, BaseModel
@@ -47,8 +46,8 @@ class LoginRequest(BaseModel):
         password (str): The password of the user. Must be between 8 and 32 characters.
     """
 
-    login: str = Field(..., min_length=16, max_length=32, examples=["username"])
-    password: str = Field(..., min_length=8, max_length=32, examples=["password"])
+    login: str = Field(..., min_length=16, max_length=64, examples=["username"])
+    password: str = Field(..., min_length=8, max_length=64, examples=["password"])
 
 
 class LoginResponse(BaseModel):

@@ -54,7 +54,9 @@ async def login(uow: UOWDep, user: LoginRequest) -> LoginResponse:
     """
     try:
         user_data = await validate_auth_user(
-            uow=uow, login=user.login, password=user.password
+            uow=uow,
+            login=user.login,
+            password=user.password,
         )
         access_token = create_access_token(user_data)
         refresh_token = create_refresh_token(user_data)

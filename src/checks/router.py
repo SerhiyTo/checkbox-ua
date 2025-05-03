@@ -16,6 +16,7 @@ router = APIRouter(
 
 templates = Jinja2Templates(directory="templates")
 
+
 @router.post("", response_model=CheckResponse, status_code=HTTP_201_CREATED)
 async def create_check(
     uow: UOWDep,
@@ -125,7 +126,9 @@ async def get_rendered_check(request: Request, uow: UOWDep, public_uuid: str):
     :return: HTML response with the rendered check.
     """
     try:
-        check = await CheckService(uow).get_check_by_public_uuid(public_uuid=public_uuid)
+        check = await CheckService(uow).get_check_by_public_uuid(
+            public_uuid=public_uuid
+        )
         formatted_created_at = check.created_at.strftime("%d.%m.%Y %H:%M")
         return templates.TemplateResponse(
             request=request,
@@ -134,7 +137,13 @@ async def get_rendered_check(request: Request, uow: UOWDep, public_uuid: str):
                 "check": check,
                 "created_at": formatted_created_at,
                 "payment_type": check.payment.type.value.capitalize(),
-            }
+            },
+        )
+
+    except CheckNotFound as e:
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=str(e),
         )
 
     except Exception as e:

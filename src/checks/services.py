@@ -70,7 +70,9 @@ class CheckService:
 
         return checks[0]
 
-    async def get_check_by_id(self, check_id: int, user_id: int = None) -> CheckResponse:
+    async def get_check_by_id(
+        self, check_id: int, user_id: int = None
+    ) -> CheckResponse:
         """
         Get check by ID.
 
@@ -121,7 +123,8 @@ class CheckService:
                     total=check["total"],
                     rest=check["rest"],
                     created_at=check["created_at"],
-                ) for check in checks
+                )
+                for check in checks
             ]
 
     async def _add_check_items(self, products: list, check_id: int) -> list[dict]:
@@ -162,7 +165,7 @@ class CheckService:
 
     @staticmethod
     def _build_check_data(
-            user_id: int, payment: dict, total: float, rest: float
+        user_id: int, payment: dict, total: float, rest: float
     ) -> dict:
         """
         Build the check data dictionary.
