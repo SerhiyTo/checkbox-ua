@@ -47,6 +47,7 @@ class CheckService:
 
             return CheckResponse(
                 id=check["id"],
+                public_uuid=str(check["public_uuid"]),
                 products=products,
                 payment=payment,
                 total=total,
@@ -115,6 +116,7 @@ class CheckService:
             return [
                 CheckResponse(
                     id=check["id"],
+                    public_uuid=str(check["public_uuid"]),
                     products=check["products"],
                     payment={
                         "type": check["type"],

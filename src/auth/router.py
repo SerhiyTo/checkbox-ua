@@ -3,7 +3,7 @@ from starlette import status
 from starlette.status import HTTP_201_CREATED
 
 from src.auth.dependencies import validate_auth_user
-from src.auth.exceptions import UserAlreadyExists
+from src.auth.exceptions import UserAlreadyExists, InvalidCredentials
 from src.auth.schemas import (
     RegisterResponse,
     RegisterRequest,
@@ -35,7 +35,10 @@ async def register(uow: UOWDep, user: RegisterRequest) -> RegisterResponse:
         return RegisterResponse(**created_user)
 
     except UserAlreadyExists as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+        raise HTTPException(
+            status_code=e.status_code,
+            detail=str(e),
+        )
 
     except Exception as e:
         raise HTTPException(
@@ -63,6 +66,18 @@ async def login(uow: UOWDep, user: LoginRequest) -> LoginResponse:
         return LoginResponse(
             access_token=access_token,
             refresh_token=refresh_token,
+        )
+
+    except UserAlreadyExists as e:
+        raise HTTPException(
+            status_code=e.status_code,
+            detail=str(e),
+        )
+
+    except InvalidCredentials as e:
+        raise HTTPException(
+            status_code=e.status_code,
+            detail=str(e),
         )
 
     except Exception as e:

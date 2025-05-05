@@ -33,3 +33,7 @@ ruff = "^0.11.7"
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "function"
+filterwarnings = [
+    "ignore:There is no current event loop:DeprecationWarning",
+    "ignore:The event_loop fixture provided by pytest-asyncio has been redefined:DeprecationWarning"
+]

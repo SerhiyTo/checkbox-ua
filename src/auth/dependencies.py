@@ -4,6 +4,7 @@ import jwt
 from fastapi import HTTPException, Depends
 from starlette import status
 
+from src.auth.exceptions import InvalidCredentials, UserNotFound
 from src.auth.services import UserService
 from src.auth.utils import verify_password, decode_token, validate_token
 from src.config import oauth2_scheme
@@ -26,16 +27,10 @@ async def validate_auth_user(
     """
     exising_user = await UserService(uow).get_user_by_login(login=login)
     if not exising_user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found.",
-        )
+        raise UserNotFound("User not found.")
 
     if not verify_password(password, exising_user["password"]):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid password.",
-        )
+        raise InvalidCredentials("Invalid password.")
 
     return exising_user
 

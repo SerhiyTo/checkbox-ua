@@ -73,6 +73,11 @@ class CheckResponse(BaseModel):
     """
 
     id: int = Field(..., examples=[1])
+    public_uuid: str = Field(
+        ...,
+        examples=["123e4567-e89b-12d3-a456-426614174000"],
+        description="Public UUID of the check",
+    )
     products: list[Product] = Field(...)
     payment: Payment = Field(...)
     total: float = Field(

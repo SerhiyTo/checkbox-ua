@@ -25,6 +25,7 @@ async def test_register_user_success():
     assert response.json()["last_name"] == TEST_LAST_NAME
 
 
+@pytest.mark.asyncio
 async def test_register_user_fail():
     async with AsyncClient(
         transport=ASGITransport(app),
@@ -39,14 +40,15 @@ async def test_register_user_fail():
                 "password": TEST_PASSWORD,
             },
         )
-    assert response.status_code == 400
-    assert response.json()["detail"] == "User already exists."
+    assert response.status_code == 409
+    assert response.json()["detail"] == f"User with username '{TEST_LOGIN}' already exists."
 
 
 @pytest.mark.asyncio
 async def test_login_user_success():
     async with AsyncClient(
-        transport=ASGITransport(app), base_url="http://test"
+        transport=ASGITransport(app),
+        base_url="http://test",
     ) as client:
         response = await client.post(
             "/auth/login",
@@ -55,15 +57,16 @@ async def test_login_user_success():
                 "password": TEST_PASSWORD,
             },
         )
-        print(response.json())
     assert response.status_code == 200
     assert "access_token" in response.json()
+    assert "refresh_token" in response.json()
 
 
 @pytest.mark.asyncio
 async def test_login_user_fail():
     async with AsyncClient(
-        transport=ASGITransport(app), base_url="http://test"
+        transport=ASGITransport(app),
+        base_url="http://test",
     ) as client:
         response = await client.post(
             "/auth/login",
@@ -72,6 +75,5 @@ async def test_login_user_fail():
                 "password": "wrong_password",
             },
         )
-        print(response.json())
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid password."
